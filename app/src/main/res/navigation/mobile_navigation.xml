@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_about">
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.developer.pollingmanagementsystem.ui.About"
+        android:label="@string/about"
+        tools:layout="@layout/about_fragment" />
+
+    <fragment
+        android:id="@+id/nav_zonal"
+        android:name="com.developer.pollingmanagementsystem.ui.ZonalOfficer"
+        android:label="@string/zonal_officer"
+        tools:layout="@layout/zonal_officer_fragment" />
+
+    <fragment
+        android:id="@+id/nav_preciding"
+        android:name ="com.developer.pollingmanagementsystem.ui.PrecidingOfficer"
+        android:label="@string/preciding_officer"
+        tools:layout="@layout/preciding_officer_fragment" />
+</navigation>

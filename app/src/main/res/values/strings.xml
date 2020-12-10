@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Polling Management System</string>
+    <string name="register">Register</string>
+    <string name="title_activity_polling_management">PollingManagement</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="logout">Logout</string>
+    <string name="about">About</string>
+    <string name="zonal_officer">Zonal Officer</string>
+    <string name="preciding_officer">Preciding Officer</string>
+    <string name="enter_the_details">Enter the Details</string>
+    <string name="booth_number">Booth Number</string>
+    <string name="male_candidates_number">Male Candidates Number</string>
+    <string name="female_candidates_number">Female Candidates Number</string>
+    <string name="total">Total :</string>
+    <string name="submit">Submit</string>
+    <string name="enter_time">Enter Time</string>
+</resources>
