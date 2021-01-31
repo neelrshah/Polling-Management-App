@@ -1,11 +1,9 @@
 package com.developer.pollingmanagementsystem;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity {
 

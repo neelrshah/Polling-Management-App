@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,22 +23,32 @@ import com.developer.pollingmanagementsystem.PollingDataModel;
 import com.developer.pollingmanagementsystem.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import static android.widget.Toast.makeText;
 
 public class PrecidingOfficer extends Fragment {
 
     private PrecidingOfficerViewModel mViewModel;
-    public EditText timeEditText,boothNumberEditText,maleEditText,femaleEditText,zonalIdEditText,totalVotersEditText;
-    public TextView totalTextView,percentageTextView;
+    public EditText maleEditText,femaleEditText,totalVotersEditText;
+    public TextView totalTextView,percentageTextView,zonalIdEditText,timeEditText,boothNumberEditText;
     public Button submitButton;
     public float voterPercentage;
     public String time,boothNumber,zonalId,totalVoters;
     public int maleCount = 0;
     public int femaleCount = 0;
     public int totalCount = 0;
+
 
     //Firebase reference to upload data
     DatabaseReference reference ;
@@ -53,8 +64,8 @@ public class PrecidingOfficer extends Fragment {
 
         View view = inflater.inflate(R.layout.preciding_officer_fragment, container, false);
 
-        //GRAB VIEWS
 
+        //GRAB VIEWS
         timeEditText = view.findViewById(R.id.timeEditText);
         boothNumberEditText = view.findViewById(R.id.bootNumberEditText);
         maleEditText = view.findViewById(R.id.maleCountEditText);
@@ -65,13 +76,44 @@ public class PrecidingOfficer extends Fragment {
         totalVotersEditText = view.findViewById(R.id.totalVotersEditText);
         percentageTextView = view.findViewById(R.id.percentageTextView);
 
-        //GRAB TEXT FROM VIEWS
+        //SET TIME FROM SYSTEM
+        Calendar calender = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
+        String currentDateandTime = sdf.format(calender.getTime());
+        Log.d("DATE",currentDateandTime);
+        timeEditText.setText(currentDateandTime);
 
+
+        //GRAB TEXT FROM VIEWS
         time = timeEditText.getText().toString();
         boothNumber = boothNumberEditText.getText().toString();
         maleCount = Integer.parseInt(String.valueOf(maleEditText.getText()));
         femaleCount = Integer.parseInt(String.valueOf(femaleEditText.getText()));
         totalVoters = String.valueOf(totalVotersEditText.getText());
+
+
+        // SET ZONAL ID AND BOOTH NUMBER FROM DATABASE
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://pollingmanagementsystem-default-rtdb.firebaseio.com/")
+                .getReference();
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                zonalId = dataSnapshot.child("Users").child(uid).child("zonalOfficierId").getValue(String.class);
+                zonalIdEditText.setText(zonalId);
+
+                boothNumber = dataSnapshot.child("Users").child(uid).child("stationId").getValue(String.class);
+                boothNumberEditText.setText(boothNumber);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         //Used to automatic change addition when numbers are updated.
 

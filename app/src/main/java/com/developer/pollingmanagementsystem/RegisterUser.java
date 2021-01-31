@@ -24,7 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterUser extends AppCompatActivity {
 
-    public EditText nameEditText, emailEditText, contactEditText, pollingStationIdEditText, passwordEditText,zonalOfficierIdTextView;
+    public EditText nameEditText, emailEditText, contactEditText, pollingStationIdEditText, passwordEditText
+            ,zonalOfficierIdTextView,securityCodeEditText;
     public Spinner officerPositionSpinner;
     public Button registerButton;
     public ProgressBar progressBar;
@@ -48,6 +49,7 @@ public class RegisterUser extends AppCompatActivity {
         officerPositionSpinner = findViewById(R.id.spinner);
         registerButton = findViewById(R.id.registerBtn);
         progressBar = findViewById(R.id.registerProgressBar);
+        securityCodeEditText =findViewById(R.id.securityCodeTextView);
 
         //CODE FOR SPINNER
 
@@ -64,7 +66,15 @@ public class RegisterUser extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerUser();
+                String secCode = String.valueOf(securityCodeEditText.getText());
+
+                if (secCode.equals("PMS@+91")){
+                    registerUser();
+                }else{
+                    Toast.makeText(RegisterUser.this, "Enter Valid Code", Toast.LENGTH_SHORT).show();
+                    securityCodeEditText.setError("Enter Valid Code Given by Gov.");
+                }
+
             }
         });
     }

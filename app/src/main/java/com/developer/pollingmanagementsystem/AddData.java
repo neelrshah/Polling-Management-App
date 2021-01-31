@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,13 +20,21 @@ import android.widget.Toast;
 import com.developer.pollingmanagementsystem.ui.ZonalOfficer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class AddData extends AppCompatActivity {
 
-    public EditText timeEditText,boothNumberEditText,maleEditText,femaleEditText,zonalIdEditText,totalVotersEditText;
-    public TextView totalTextView,percentageTextView;
+    public EditText boothNumberEditText,maleEditText,femaleEditText,totalVotersEditText;
+    public TextView totalTextView,percentageTextView,timeEditText,zonalIdEditText;
     public Button submitButton;
     public float voterPercentage;
     public String time,boothNumber,zonalId,totalVoters;
@@ -54,6 +63,14 @@ public class AddData extends AppCompatActivity {
         totalVotersEditText = findViewById(R.id.totalVotersEditText);
         percentageTextView = findViewById(R.id.percentageTextView);
 
+        //SET TIME FROM SYSTEM
+        Calendar calender = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss a");
+        String currentDateandTime = sdf.format(calender.getTime());
+        Log.d("DATE",currentDateandTime);
+        timeEditText.setText(currentDateandTime);
+
+
         //GRAB TEXT FROM VIEWS
 
         time = timeEditText.getText().toString();
@@ -62,6 +79,23 @@ public class AddData extends AppCompatActivity {
         femaleCount = Integer.parseInt(String.valueOf(femaleEditText.getText()));
         totalVoters = String.valueOf(totalVotersEditText.getText());
 
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = user.getUid();
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://pollingmanagementsystem-default-rtdb.firebaseio.com/")
+                .getReference();
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                zonalId = dataSnapshot.child("Users").child(uid).child("zonalOfficierId").getValue(String.class);
+                zonalIdEditText.setText(zonalId);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         //Used to automatic change addition when numbers are updated.
 
         TextWatcher textWatcher = new TextWatcher() {
